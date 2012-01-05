@@ -29,7 +29,7 @@ function pkstats = detect_lxb_peaks_single(x, varargin)
 %   'debug' : Print debugging info. Logical [true] 
 %   'expect_npeak' : integer, Expected number of peaks. Default is 2.
 %   'expect_support_pct': vector, Expected bead support gradient. Default
-%       is [65 35]
+%       is [65 35]s
 %
 %   See also: DETECT_LXB_PEAKS_MULTI
 
@@ -38,14 +38,14 @@ pnames = {'logxform', 'lowthresh', 'highthresh', ...
     'minbead', 'pkmethod', 'expect_npeak',...
     'debug', 'title', ...
     'rpt',...
-    'expect_support_pct'};
+    'expect_support_pct', 'newfig'};
 
 dflts = { true, 4, 15,...    
     false, ...
     10, 'kmeans_opt', 2,...
     false, '', ...
     'hist',...
-    [65 35]};
+    [65 35], true};
 arg = parse_args(pnames, dflts, varargin{:});
 
 nbead = length(x);
@@ -174,7 +174,9 @@ switch (arg.pkmethod)
 end
 
 if arg.showfig
-    hf = figure;
+    if arg.newfig
+        hf = figure;
+    end
     bins = linspace(4, 16, 50);
     [a0,b0] = hist(x, bins);
     bar(b0,a0/max(a0), 'facecolor',[0.75,0.75,0.75])

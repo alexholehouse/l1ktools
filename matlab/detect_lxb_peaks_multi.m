@@ -37,8 +37,8 @@ function pkstats = detect_lxb_peaks_multi(rp1, rid, varargin)
 %
 % See: DETECT_LXB_PEAKS_SINGLE
 
-pnames = {'analyte', 'allanalytes', 'notduo', 'showfig', 'rpt'};
-dflts = { [], 1:500, '[1:10,11,499]', false, 'analyte' };
+pnames = {'analyte', 'allanalytes', 'notduo', 'showfig', 'rpt', 'out', 'overwrite', 'newfig'};
+dflts = { [], 1:500, '[1:10,11,499]', false, 'analyte', '', 'true', true};
 arg = parse_args(pnames, dflts, varargin{:});
 % nonduo analytes
 arg.notduo = eval(arg.notduo);
@@ -69,6 +69,13 @@ for ii=1:nanalyte
     end
     if arg.showfig
         namefig(sprintf('%s_%d', arg.rpt, analyte(ii)));
+        if ~arg.newfig
+            if ii == 1 && ~exist(fullfile(arg.out, 'figures'), 'dir')
+                mkdir(fullfile(arg.out, 'figures'))
+            end
+            savefigures('out', fullfile(arg.out, 'figures'), 'mkdir', false, 'overwrite', arg.overwrite);
+            hold off
+        end
     end
 end
 

@@ -21,16 +21,17 @@ function [pkstats, raw] = dpeak(lxbfile, varargin)
 pnames = {'out'};
 dflts = {''};
 args = parse_args(pnames, dflts, varargin{:});
+showfig = ~isempty(args.out);
 
 % read raw data
 raw = parse_lxb(lxbfile);
 
 % detect peaks
-pkstats = detect_lxb_peaks_multi(raw.RP1, raw.RID, varargin{:});
+pkstats = detect_lxb_peaks_multi(raw.RP1, raw.RID, 'showfig', showfig, 'newfig', false, varargin{:});
 
 % save pkstats
 if ~isempty(args.out)
-    save_pkstats(args.out, pkstats)
+    save_pkstats(fullfile(args.out, 'pkstats.txt'), pkstats)
 end
 
 end
