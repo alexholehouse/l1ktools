@@ -14,20 +14,22 @@ function [pkstats, raw] = dpeak(lxbfile, varargin)
 %
 %   [...] = DPEAK(LXBFILE, param1, val1,...) specify optional
 %   parameter/value pairs:
-%   'out' : string, Filename to save pkstats  tab-delimited textfile.
-%
+%   'out' : string, Output folder. If not empty, will save a tab-delimited
+%       textfile of detected peaks (pkstats.txt) and optionally plots of
+%       the intensity distributions if 'showfig' is true.
+%   'showfig' : boolean, Show intensity distributions. Default is false.
 %   See also: PLOT_PEAKS, SAVE_PKSTATS, DETECT_LXB_PEAKS_MULTI
 
-pnames = {'out'};
-dflts = {''};
+pnames = {'out', 'showfig'};
+dflts = {'', false};
 args = parse_args(pnames, dflts, varargin{:});
-showfig = ~isempty(args.out);
 
 % read raw data
 raw = parse_lxb(lxbfile);
 
 % detect peaks
-pkstats = detect_lxb_peaks_multi(raw.RP1, raw.RID, 'showfig', showfig, 'newfig', false, varargin{:});
+pkstats = detect_lxb_peaks_multi(raw.RP1, raw.RID, ...
+    'showfig', args.showfig, 'newfig', false, varargin{:});
 
 % save pkstats
 if ~isempty(args.out)
